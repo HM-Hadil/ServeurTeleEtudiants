@@ -3,10 +3,10 @@ import Execptions.EtudiantIntrouvableException;
 
 import java.util.Vector;
 
-public class Service implements repository{
+public class Services implements repository{
     private Vector<Etudiant> etudiants ;
 
-    public Service(){
+    public Services(){
         etudiants =new Vector<Etudiant>();
     }
     @Override
