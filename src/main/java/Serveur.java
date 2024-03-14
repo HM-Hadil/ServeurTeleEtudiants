@@ -26,7 +26,7 @@ public class Serveur {
         }
         catch(IOException e){
             e.printStackTrace();
-            System.out.println("deconnect ");
+            System.out.println("serveur déconnecté ");
         }
     }
 }

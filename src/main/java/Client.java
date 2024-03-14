@@ -13,9 +13,17 @@ public class Client {
             InputStream is= s.getInputStream();
             InputStreamReader isr= new InputStreamReader(is);
             BufferedReader bfr= new BufferedReader(isr);
+            //pour afficher les 4 services ligne par ligne
+            System.out.println(bfr.readLine() + "\n" +bfr.readLine() + "\n"+
+                    bfr.readLine() + "\n"+ bfr.readLine());
+            //fermeture
+            bfr.close();
+            s.close();
+
 
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("client déconneté");
         }
 
     }
