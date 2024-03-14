@@ -4,74 +4,107 @@ import Execptions.EtudiantIntrouvableException;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-//. La partie cliente permet d’afficher un menu qui permet de lister les services du serveur. Ce menu
-//doit faciliter l’utilisation de l’application.
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 public class Serveur {
-    public static void main(String[] args){
-        Services service = new Services();
+    private static List<Client> clients = new ArrayList<>();
+    private static Services services = new Services();
 
+    public static void main(String[] args) {
         try {
-            ServerSocket ss = new ServerSocket(12345);
-            System.out.println("En attente de connexion...");
+            ServerSocket serverSocket = new ServerSocket(12345);
+            System.out.println("Serveur en attente de connexions...");
 
             while (true) {
-                Socket s = ss.accept();
-                OutputStream os = s.getOutputStream();
-                PrintWriter pw = new PrintWriter(os);
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("client conncté...");
 
-                //envoyer la liste des services rendu par le serveur
-                pw.println(service.getServices());
-
-                // Lire l'option choisie par le client
-                BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
-                int option = Integer.parseInt(br.readLine());
-
-                // Traitement en fonction de l'option choisie
-                switch (option) {
-                    case 1:
-                        // Ajouter un étudiant
-                        String nom = br.readLine();
-                        System.out.println(nom);
-                        String prenom = br.readLine();
-                        String mail = br.readLine();
-                        String telephone = br.readLine();
-                        String url = br.readLine();
-                        String date = br.readLine();
-                        // Lecture d'informations de l'étudiant...
-                        Etudiant etudiant = new Etudiant(nom, prenom,telephone,mail,url,date);
-                        try {
-                            service.ajouterEtudiant(etudiant);
-                            pw.println("Etudiant ajouté avec succès.");
-                        } catch (EtudiantExisteException e) {
-                            pw.println("Erreur: " + e.getMessage());
-                        }
-                        break;
-                    // Rechercher un étudiant
-                    case 2:
-                        String searchNom = br.readLine();
-                        String searchPrenom = br.readLine();
-                        try {
-                            String etudiantInfo = service.getEtudiant(searchNom, searchPrenom);
-                            pw.println(etudiantInfo);
-                        } catch (EtudiantIntrouvableException e) {
-                            pw.println("Étudiant introuvable: " + e.getMessage());
-                        }
-                        pw.flush();
-                        break;
-
-                    default:
-                        pw.println("Option invalide.");
-                        break;
-                }
-                pw.flush();
-                pw.close();
-                s.close();
-
-        }
-
-    }catch (IOException e) {
+                // Créer un nouveau gestionnaire de client pour gérer la connexion
+                Client client = new Client(clientSocket);
+                clients.add(client);
+                client.start();
+            }
+        } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Serveur déconnecté.");
         }
-    }}
+    }
+
+    static class Client extends Thread {
+        private Socket clientSocket;
+        private BufferedReader reader;
+        private PrintWriter writer;
+
+        Client(Socket clientSocket) {
+            this.clientSocket = clientSocket;
+        }
+
+        public void run() {
+            try {
+                reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                writer = new PrintWriter(clientSocket.getOutputStream(), true);
+
+                // Envoyer les services disponibles au client
+                writer.println("Nos services:");
+                writer.println("1. Ajouter un etudiant");
+                writer.println("2. Rechercher un etudiant");
+                writer.println("3. Afficher la liste des etudiants");
+                writer.println("4. Quitter");
+
+                // Lire les requêtes du client
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    int option = Integer.parseInt(line);
+                    switch (option) {
+                        case 1:
+                            writer.println("Entrez les informations de l'etudiant: nom, prenom, telephone, mail, URL, date de naissance (separes par des virgules)");
+                            String[] studentInfo = reader.readLine().split(",");
+                            try {
+                                services.ajouterEtudiant(new Etudiant(studentInfo[0], studentInfo[1], studentInfo[2], studentInfo[3], studentInfo[4], studentInfo[5]));
+                                writer.println("Etudiant ajoute avec succes.");
+                            } catch (EtudiantExisteException e) {
+                                writer.println("Erreur: " + e.getMessage());
+                            }
+                            break;
+                        case 2:
+                            writer.println("Entrez le nom et le prenom de l'etudiant a rechercher (separes par un espace)");
+                            String[] searchInfo = reader.readLine().split(" ");
+                            try {
+                                String etudiantInfo = services.getEtudiant(searchInfo[0], searchInfo[1]);
+                                writer.println(etudiantInfo);
+                            } catch (EtudiantIntrouvableException e) {
+                                writer.println("Etudiant introuvable: " + e.getMessage());
+                            }
+                            break;
+                        case 3:
+                            Vector<Etudiant> etudiantsList = services.getAllEtudiant();
+                            StringBuilder studentsInfo = new StringBuilder();
+                            for (Etudiant etd : etudiantsList) {
+                                studentsInfo.append(etd.toString()).append("\n");
+                            }
+                            writer.println(studentsInfo.toString());
+                            break;
+                        case 4:
+                            writer.println("Déconnexion...");
+                            clientSocket.close();
+                            return;
+                        default:
+                            writer.println("Option invalide.");
+                            break;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    reader.close();
+                    writer.close();
+                    clientSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
