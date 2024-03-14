@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d638619c-b011-47b4-a096-46a3826be3fa" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Etudiant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Etudiant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Execptions/EtudiantExisteException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Execptions/EtudiantExisteException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Serveur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Serveur.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Services.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Services.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +55,20 @@
       <recent name="" />
     </key>
   </component>
+  <component name="RunManager">
+    <configuration name="Serveur" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Serveur" />
+      <module name="ServeurTeleEtudiant" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Serveur" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -58,7 +77,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1710413814351</updated>
-      <workItem from="1710413817370" duration="4687000" />
+      <workItem from="1710413817370" duration="7831000" />
     </task>
     <servers />
   </component>

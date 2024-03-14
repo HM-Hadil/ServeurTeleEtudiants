@@ -9,24 +9,25 @@ public class Services implements repository{
     public Services(){
         etudiants =new Vector<Etudiant>();
     }
+
     @Override
     public void ajouterEtudiant(Etudiant etudiant) throws EtudiantExisteException {
-        int index = etudiants.indexOf(etudiant);
-        if (index!=-1){
+        if (etudiants.contains(etudiant)) {
             throw new EtudiantExisteException();
         }
         etudiants.add(etudiant);
-
     }
 
     @Override
     public String getEtudiant(String nom, String prenom) throws EtudiantIntrouvableException {
-      int index =etudiants.indexOf(new Etudiant(nom,prenom,null,null,null,null));
-        if (index ==-1){
-            throw new EtudiantIntrouvableException();
+        for (Etudiant etudiant : etudiants) {
+            if (etudiant.getNom().equals(nom) && etudiant.getPrenom().equals(prenom)) {
+                return etudiant.toString(); // Retourne les propriétés de l'étudiant
+            }
         }
-        return etudiants.get(index).toString();
+        throw new EtudiantIntrouvableException();
     }
+
 
     @Override
     public Vector<Etudiant> getAllEtudiant() {
@@ -35,10 +36,10 @@ public class Services implements repository{
 
     @Override
     public String getServices() {
-       String insert = "ajouter un etudiant";
-       String getInfoEtuddiant= "afficher les information d'un etudiant";
-       String getAllEtudiant="afficher la liste des etudiants";
-       String exit= "sortir";
-       return insert+ "\n"+ getInfoEtuddiant+"\n"+getAllEtudiant+"\n"+exit;
+        String insert = "ajouter un étudiant";
+        String getInfoEtudiant = "afficher les informations d'un étudiant";
+        String getAllEtudiant = "afficher la liste des étudiants";
+        String exit = "sortir";
+        return insert + "\n" + getInfoEtudiant + "\n" + getAllEtudiant + "\n" + exit;
     }
 }

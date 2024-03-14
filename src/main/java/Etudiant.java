@@ -1,14 +1,15 @@
 import java.util.Date;
+import java.util.Objects;
 
 public class Etudiant {
     private String nom;
     private String prenom;
-    private Long telephone;
+    private String telephone;
     private String mail;
     private String url;
-    private Date date_naissance;
+    private String date_naissance;
 
-    public Etudiant(String nom, String prenom, Long telephone, String mail, String url, Date date_naissance) {
+    public Etudiant(String nom, String prenom, String telephone, String mail, String url, String date_naissance) {
 
         this.nom = nom;
         this.prenom = prenom;
@@ -24,7 +25,7 @@ public class Etudiant {
     public String getPrenom() {
         return prenom;
     }
-    public Long getTelephone() {
+    public String getTelephone() {
         return telephone;
     }
     public String getMail() {
@@ -34,20 +35,30 @@ public class Etudiant {
         return url;
     }
 
-    public Date getDate_naissance() {
+    public String getDate_naissance() {
         return date_naissance;
     }
 
-    // exceptions pour gérer une
     //insertion redondante d’un étudiant dont le nom et le prénom existent déjà surl’annuaire
-
-    public boolean EtudiantExiste(Object ob){
-        Etudiant etudiant=(Etudiant) ob;
-        return nom.equals(etudiant.getNom()) && prenom.equals(etudiant.getPrenom());
+    @Override
+    public boolean equals(Object ob) {
+        if (this == ob) return true;
+        if (ob == null || getClass() != ob.getClass()) return false;
+        Etudiant etudiant = (Etudiant) ob;
+        return nom.equals(etudiant.nom) &&
+                prenom.equals(etudiant.prenom);
     }
-    public  String AfficheEtudiant(){
-        return "nom: "+nom+" prenom: "+prenom+" telephone: "+telephone+" mail: "+mail+" url: "+url+
-                "date de naissance: "+date_naissance;
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(nom, prenom);
+    }
+    @Override
+    public String toString() {
+        return "Nom: " + nom +
+                ", Prénom: " + prenom +
+                ", Téléphone: " + telephone +
+                ", Mail: " + mail +
+                ", URL: " + url +
+                ", Date de naissance: " + date_naissance;
     }
 }
